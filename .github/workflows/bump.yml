@@ -18,7 +18,7 @@ jobs:
         if: steps.bump.outputs.bumped != ''
         run: |
           brew tap utopian-academy/deckboy "$GITHUB_WORKSPACE"
-          brew install --cask deckboy
+          brew install --cask utopian-academy/deckboy/deckboy
           test -d /Applications/Deckboy.app
       - name: Commit
         if: steps.bump.outputs.bumped != ''
