@@ -1,0 +1,24 @@
+# Install Deckboy from this tap on a clean runner, exactly as a user would.
+name: Install test
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '47 5 * * 1'
+jobs:
+  install:
+    strategy:
+      matrix:
+        runner: [macos-latest, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew tap utopian-academy/deckboy "$GITHUB_WORKSPACE"
+      - run: brew install --cask deckboy
+      - name: The app is there and is the version the cask names
+        run: |
+          test -d /Applications/Deckboy.app
+          want=$(sed -n 's/^  version "\(.*\)"/\1/p' Casks/deckboy.rb)
+          got=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" /Applications/Deckboy.app/Contents/Info.plist)
+          echo "cask $want, app $got"
+          [ "$want" = "$got" ]

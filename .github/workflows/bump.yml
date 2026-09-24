@@ -1,0 +1,29 @@
+# Follow Deckboy's releases: when a new one is published, update the cask's
+# version and hashes, and commit only after installing it from the tap works.
+name: Bump
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 */6 * * *'
+permissions:
+  contents: write
+jobs:
+  bump:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: bump
+        run: python3 .github/scripts/bump.py
+      - name: Install the bumped cask before committing it
+        if: steps.bump.outputs.bumped != ''
+        run: |
+          brew tap utopian-academy/deckboy "$GITHUB_WORKSPACE"
+          brew install --cask deckboy
+          test -d /Applications/Deckboy.app
+      - name: Commit
+        if: steps.bump.outputs.bumped != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "deckboy ${{ steps.bump.outputs.bumped }}"
+          git push
