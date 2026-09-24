@@ -10,7 +10,13 @@ CASK = "Casks/deckboy.rb"
 
 
 def get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "homebrew-deckboy-bump"})
+    headers = {"User-Agent": "homebrew-deckboy-bump"}
+    # Anonymous API calls share a 60-an-hour limit with every other job on
+    # the runner's address. The token goes to the API only: the downloads
+    # redirect to other hosts, which must not receive it.
+    if url.startswith("https://api.github.com/") and os.environ.get("GITHUB_TOKEN"):
+        headers["Authorization"] = "Bearer " + os.environ["GITHUB_TOKEN"]
+    req = urllib.request.Request(url, headers=headers)
     return urllib.request.urlopen(req, timeout=300)
 
 
