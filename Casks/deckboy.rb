@@ -1,9 +1,9 @@
 cask "deckboy" do
   arch arm: "arm64", intel: "x86_64"
 
-  version "0.99.378"
-  sha256 arm:   "4d881e04d882341ca37b9e3231ffff0170e77d9132f3687c255469201ad50b54",
-         intel: "2f65c60a7341cbc1f9d86d97ccbc16c863e114a6b8ec509195d4be756e70d070"
+  version "0.99.379"
+  sha256 arm:   "ab5c88e48293c48e2434825e6655f56dd8f320aba1f685b8f8adff15d13eff0e",
+         intel: "9226f042906d2a289efcab77468cd4bd4492ee872a5ff0fc88f811e3e15c48ff"
 
   url "https://github.com/Utopian-Academy/Deckboy/releases/download/v#{version}/Deckboy-#{version}-macos-#{arch}.dmg"
   name "Deckboy"
